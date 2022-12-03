@@ -7,23 +7,23 @@ import { Layout, ModuleDetail, QueryResult } from '../components';
  * both needed for the ModuleDetail component
  */
 const GET_MODULE_AND_PARENT_TRACK = gql`
-  query getModuleAndParentTrack($moduleId: ID!, $trackId: ID!) {
-    module(id: $moduleId) {
-      id
-      title
-      content
-      videoUrl
+    query getModuleAndParentTrack($moduleId: ID!, $trackId: ID!) {
+        module(id: $moduleId) {
+            id
+            title
+            content
+            videoUrl
+        }
+        track(id: $trackId) {
+            id
+            title
+            modules {
+                id
+                title
+                durationInSeconds
+            }
+        }
     }
-    track(id: $trackId) {
-      id
-      title
-      modules {
-        id
-        title
-        length
-      }
-    }
-  }
 `;
 
 /**
@@ -31,17 +31,17 @@ const GET_MODULE_AND_PARENT_TRACK = gql`
  * and feeds them to the ModuleDetail component
  */
 const Module = ({ moduleId, trackId }) => {
-  const { loading, error, data } = useQuery(GET_MODULE_AND_PARENT_TRACK, {
-    variables: { moduleId, trackId },
-  });
+    const { loading, error, data } = useQuery(GET_MODULE_AND_PARENT_TRACK, {
+        variables: { moduleId, trackId },
+    });
 
-  return (
-    <Layout fullWidth>
-      <QueryResult error={error} loading={loading} data={data}>
-        <ModuleDetail track={data?.track} module={data?.module} />
-      </QueryResult>
-    </Layout>
-  );
+    return (
+        <Layout fullWidth>
+            <QueryResult error={error} loading={loading} data={data}>
+                <ModuleDetail track={data?.track} module={data?.module} />
+            </QueryResult>
+        </Layout>
+    );
 };
 
 export default Module;
